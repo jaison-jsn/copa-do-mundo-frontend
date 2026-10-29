@@ -1,13 +1,59 @@
-/* Tema: gramado, linhas brancas de campo e dourado do troféu */
+/* Tema: gramado, linhas brancas de campo e dourado do troféu.
+   Cores são tokens. Os temas "claro" e "contraste" redefinem os tokens
+   nas seções no fim deste arquivo, sem mudar as regras dos componentes. */
 :root {
+  /* Paleta base */
   --verde-escuro: #0b3d1e;
   --verde-gramado: #17572c;
   --verde-claro: #1f7a3c;
   --branco: #ffffff;
   --dourado: #d4af37;
   --dourado-escuro: #b8860b;
+
+  /* Tokens de tema (tema escuro, padrão) */
   --texto: #f4f8f5;
+  --texto-cabecalho: #f4f8f5;
   --sombra: rgba(0, 0, 0, 0.35);
+  --fundo-corpo: radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
+    repeating-linear-gradient(90deg, var(--verde-gramado) 0 60px, var(--verde-claro) 60px 120px);
+  --fundo-corpo-cor: var(--verde-gramado);
+  --fundo-campo: rgba(11, 61, 30, 0.88);
+  --borda-campo: var(--branco);
+  --fundo-cabecalho: linear-gradient(90deg, var(--verde-escuro), var(--verde-gramado));
+  --titulo: var(--dourado);
+  --texto-destaque: var(--dourado);
+  --borda-destaque: var(--dourado);
+  --fundo-destaque-suave: rgba(212, 175, 55, 0.15);
+  --fundo-superficie: var(--verde-escuro);
+  --fundo-superficie-hover: var(--verde-gramado);
+  --fundo-menu: var(--verde-escuro);
+  --fundo-form: var(--verde-escuro);
+  --linha-central: rgba(255, 255, 255, 0.25);
+  --linha-tracejada: rgba(212, 175, 55, 0.35);
+  --fundo-entrada: var(--branco);
+  --texto-entrada: var(--verde-escuro);
+  --borda-entrada: var(--branco);
+  --texto-contador: #5b6b5f;
+  --fundo-balao-usuario: var(--branco);
+  --texto-balao-usuario: var(--verde-escuro);
+  --fundo-balao-bot: var(--verde-escuro);
+  --borda-balao-bot: var(--dourado);
+  --fundo-erro: #7a1d1d;
+  --borda-erro: #ff8a8a;
+  --texto-erro: var(--texto);
+  --fundo-certo: #1f7a3c;
+  --borda-certo: #8ee3a4;
+  --fundo-errado: #7a1d1d;
+  --borda-errado: #ff8a8a;
+  --fundo-feedback: rgba(0, 0, 0, 0.25);
+  --fundo-botao-destaque: var(--dourado);
+  --texto-botao-destaque: var(--verde-escuro);
+  --fundo-botao-destaque-hover: var(--dourado-escuro);
+  --texto-botao-destaque-hover: var(--branco);
+  --fundo-hover-dourado: var(--dourado);
+  --texto-hover-dourado: var(--verde-escuro);
+  --bolinha-tempo-fundo: var(--verde-escuro);
+  --foco: var(--dourado);
 }
 
 * { box-sizing: border-box; }
@@ -17,10 +63,8 @@ html, body { height: 100%; margin: 0; }
 body {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   color: var(--texto);
-  background:
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.08), transparent 60%),
-    repeating-linear-gradient(90deg, var(--verde-gramado) 0 60px, var(--verde-claro) 60px 120px);
-  background-color: var(--verde-gramado);
+  background: var(--fundo-corpo);
+  background-color: var(--fundo-corpo-cor);
   display: flex;
   justify-content: center;
   padding: 16px;
@@ -32,9 +76,9 @@ body {
   min-height: calc(100vh - 32px);
   display: flex;
   flex-direction: column;
-  border: 3px solid var(--branco);
+  border: 3px solid var(--borda-campo);
   border-radius: 14px;
-  background: rgba(11, 61, 30, 0.88);
+  background: var(--fundo-campo);
   box-shadow: 0 10px 30px var(--sombra);
   position: relative;
   overflow: hidden;
@@ -48,7 +92,7 @@ body {
   right: 0;
   top: 50%;
   height: 2px;
-  background: rgba(255, 255, 255, 0.25);
+  background: var(--linha-central);
   pointer-events: none;
 }
 
@@ -58,8 +102,8 @@ body {
   align-items: center;
   gap: 14px;
   padding: 18px 22px;
-  border-bottom: 2px solid var(--dourado);
-  background: linear-gradient(90deg, var(--verde-escuro), var(--verde-gramado));
+  border-bottom: 2px solid var(--borda-destaque);
+  background: var(--fundo-cabecalho);
 }
 
 .trofeu { width: 52px; height: 52px; flex-shrink: 0; }
@@ -67,13 +111,14 @@ body {
 .cabecalho h1 {
   margin: 0;
   font-size: 1.6rem;
-  color: var(--dourado);
+  color: var(--titulo);
   letter-spacing: 0.5px;
 }
 
 .cabecalho p {
   margin: 2px 0 0;
   font-size: 0.9rem;
+  color: var(--texto-cabecalho);
   opacity: 0.85;
 }
 
@@ -105,22 +150,23 @@ body {
 
 .balao.usuario {
   align-self: flex-end;
-  background: var(--branco);
-  color: var(--verde-escuro);
+  background: var(--fundo-balao-usuario);
+  color: var(--texto-balao-usuario);
   border-bottom-right-radius: 4px;
 }
 
 .balao.bot {
   align-self: flex-start;
-  background: var(--verde-escuro);
-  border: 1px solid var(--dourado);
+  background: var(--fundo-balao-bot);
+  border: 1px solid var(--borda-balao-bot);
   border-bottom-left-radius: 4px;
 }
 
 .balao.erro {
   align-self: center;
-  background: #7a1d1d;
-  border: 1px solid #ff8a8a;
+  background: var(--fundo-erro);
+  border: 1px solid var(--borda-erro);
+  color: var(--texto-erro);
   font-size: 0.9rem;
 }
 
@@ -128,7 +174,7 @@ body {
   padding: 10px 4px;
   font-style: italic;
   font-size: 0.9rem;
-  color: var(--dourado);
+  color: var(--texto-destaque);
 }
 
 .digitando[hidden] { display: none; }
@@ -146,17 +192,17 @@ body {
   font-size: 0.85rem;
   padding: 6px 12px;
   border-radius: 999px;
-  border: 1px solid var(--dourado);
+  border: 1px solid var(--borda-destaque);
   background: transparent;
-  color: var(--dourado);
+  color: var(--texto-destaque);
   cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
 .sugestao:hover,
 .sugestao:focus-visible {
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--fundo-hover-dourado);
+  color: var(--texto-hover-dourado);
   outline: none;
 }
 
@@ -165,8 +211,8 @@ body {
   display: flex;
   gap: 10px;
   padding: 14px 18px 18px;
-  border-top: 2px solid var(--dourado);
-  background: var(--verde-escuro);
+  border-top: 2px solid var(--borda-destaque);
+  background: var(--fundo-form);
 }
 
 .entrada {
@@ -180,14 +226,14 @@ body {
   font: inherit;
   padding: 11px 64px 11px 14px;
   border-radius: 10px;
-  border: 2px solid var(--branco);
-  background: var(--branco);
-  color: var(--verde-escuro);
+  border: 2px solid var(--borda-entrada);
+  background: var(--fundo-entrada);
+  color: var(--texto-entrada);
 }
 
 .entrada input:focus {
   outline: none;
-  border-color: var(--dourado);
+  border-color: var(--borda-destaque);
 }
 
 .contador {
@@ -196,7 +242,7 @@ body {
   top: 50%;
   transform: translateY(-50%);
   font-size: 0.75rem;
-  color: #5b6b5f;
+  color: var(--texto-contador);
   pointer-events: none;
 }
 
@@ -208,13 +254,16 @@ body {
   padding: 0 20px;
   border-radius: 10px;
   border: none;
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--fundo-botao-destaque);
+  color: var(--texto-botao-destaque);
   cursor: pointer;
   transition: background 0.2s;
 }
 
-#enviar:hover:not(:disabled) { background: var(--dourado-escuro); color: var(--branco); }
+#enviar:hover:not(:disabled) {
+  background: var(--fundo-botao-destaque-hover);
+  color: var(--texto-botao-destaque-hover);
+}
 #enviar:disabled { opacity: 0.55; cursor: not-allowed; }
 
 /* Telas pequenas */
@@ -228,26 +277,48 @@ body {
 /* ===== Menu e páginas de edições e seleções ===== */
 .menu {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   padding: 10px 18px;
-  border-bottom: 1px solid var(--dourado);
-  background: var(--verde-escuro);
+  border-bottom: 1px solid var(--borda-destaque);
+  background: var(--fundo-menu);
 }
 
 .menu a {
   font-size: 0.9rem;
   padding: 6px 12px;
   border-radius: 999px;
-  color: var(--dourado);
+  color: var(--texto-destaque);
   text-decoration: none;
   border: 1px solid transparent;
+  white-space: nowrap;
 }
 
 .menu a:hover,
 .menu a:focus-visible,
 .menu a[aria-current="page"] {
-  border-color: var(--dourado);
-  background: rgba(212, 175, 55, 0.15);
+  border-color: var(--borda-destaque);
+  background: var(--fundo-destaque-suave);
+  outline: none;
+}
+
+/* Botão de tema, no fim do menu */
+.botao-tema {
+  font: inherit;
+  font-size: 0.85rem;
+  margin-left: auto;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--borda-destaque);
+  background: transparent;
+  color: var(--texto-destaque);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.botao-tema:hover,
+.botao-tema:focus-visible {
+  background: var(--fundo-destaque-suave);
   outline: none;
 }
 
@@ -269,8 +340,8 @@ body {
   gap: 4px;
   padding: 12px 14px;
   border-radius: 12px;
-  border: 1px solid var(--dourado);
-  background: var(--verde-escuro);
+  border: 1px solid var(--borda-destaque);
+  background: var(--fundo-superficie);
   color: var(--texto);
   text-decoration: none;
   box-shadow: 0 2px 6px var(--sombra);
@@ -280,14 +351,14 @@ body {
 .cartao:hover,
 .cartao:focus-visible {
   transform: translateY(-2px);
-  background: var(--verde-gramado);
+  background: var(--fundo-superficie-hover);
   outline: none;
 }
 
 .cartao-ano {
   font-size: 1.3rem;
   font-weight: bold;
-  color: var(--dourado);
+  color: var(--texto-destaque);
 }
 
 .cartao-titulo {
@@ -302,7 +373,7 @@ body {
 .voltar {
   display: inline-block;
   margin-bottom: 14px;
-  color: var(--dourado);
+  color: var(--texto-destaque);
   text-decoration: none;
 }
 
@@ -318,8 +389,8 @@ body {
   gap: 8px;
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1px solid var(--dourado);
-  background: var(--verde-escuro);
+  border: 1px solid var(--borda-destaque);
+  background: var(--fundo-superficie);
 }
 
 .linha-ficha {
@@ -327,7 +398,7 @@ body {
   grid-template-columns: minmax(130px, 40%) 1fr;
   gap: 10px;
   padding-bottom: 6px;
-  border-bottom: 1px dashed rgba(212, 175, 55, 0.35);
+  border-bottom: 1px dashed var(--linha-tracejada);
 }
 
 .linha-ficha:last-child {
@@ -335,7 +406,7 @@ body {
 }
 
 .linha-ficha dt {
-  color: var(--dourado);
+  color: var(--texto-destaque);
   font-weight: bold;
 }
 
@@ -357,7 +428,7 @@ body {
 }
 
 .carregando {
-  color: var(--dourado);
+  color: var(--texto-destaque);
   font-style: italic;
 }
 
@@ -383,7 +454,7 @@ body {
 }
 
 .filtro label {
-  color: var(--dourado);
+  color: var(--texto-destaque);
   font-weight: bold;
 }
 
@@ -391,15 +462,15 @@ body {
   font: inherit;
   padding: 8px 10px;
   border-radius: 8px;
-  border: 2px solid var(--branco);
-  background: var(--branco);
-  color: var(--verde-escuro);
+  border: 2px solid var(--borda-entrada);
+  background: var(--fundo-entrada);
+  color: var(--texto-entrada);
   max-width: 100%;
 }
 
 .filtro select:focus {
   outline: none;
-  border-color: var(--dourado);
+  border-color: var(--borda-destaque);
 }
 
 .resumo {
@@ -413,7 +484,7 @@ body {
   list-style: none;
   margin: 0;
   padding: 0 0 0 26px;
-  border-left: 3px solid var(--dourado);
+  border-left: 3px solid var(--borda-destaque);
   display: grid;
   gap: 14px;
 }
@@ -430,8 +501,8 @@ body {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--verde-escuro);
-  border: 3px solid var(--dourado);
+  background: var(--bolinha-tempo-fundo);
+  border: 3px solid var(--borda-destaque);
   box-sizing: border-box;
 }
 
@@ -441,8 +512,8 @@ body {
   gap: 2px;
   padding: 10px 14px;
   border-radius: 10px;
-  border: 1px solid var(--dourado);
-  background: var(--verde-escuro);
+  border: 1px solid var(--borda-destaque);
+  background: var(--fundo-superficie);
   color: var(--texto);
   text-decoration: none;
   transition: background 0.15s, transform 0.15s;
@@ -450,7 +521,7 @@ body {
 
 .item-link:hover,
 .item-link:focus-visible {
-  background: var(--verde-gramado);
+  background: var(--fundo-superficie-hover);
   transform: translateX(3px);
   outline: none;
 }
@@ -458,7 +529,7 @@ body {
 .item-ano {
   font-size: 1.2rem;
   font-weight: bold;
-  color: var(--dourado);
+  color: var(--texto-destaque);
 }
 
 .item-campeao {
@@ -470,21 +541,12 @@ body {
   opacity: 0.85;
 }
 
-/* Os itens do menu não quebram linha no celular. */
-.menu {
-  flex-wrap: wrap;
-}
-
-.menu a {
-  white-space: nowrap;
-}
-
 /* ===== Quiz ===== */
 .quiz-cabecalho {
   display: flex;
   justify-content: space-between;
   font-size: 0.9rem;
-  color: var(--dourado);
+  color: var(--texto-destaque);
   margin-bottom: 12px;
 }
 
@@ -505,8 +567,8 @@ body {
   text-align: left;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid var(--dourado);
-  background: var(--verde-escuro);
+  border: 1px solid var(--borda-destaque);
+  background: var(--fundo-superficie);
   color: var(--texto);
   cursor: pointer;
   transition: background 0.15s;
@@ -516,7 +578,7 @@ body {
 .quiz-opcao:focus-visible,
 .quiz-botao:hover,
 .quiz-botao:focus-visible {
-  background: var(--verde-gramado);
+  background: var(--fundo-superficie-hover);
   outline: none;
 }
 
@@ -525,22 +587,22 @@ body {
 }
 
 .quiz-opcao.certa {
-  background: #1f7a3c;
-  border-color: #8ee3a4;
+  background: var(--fundo-certo);
+  border-color: var(--borda-certo);
   font-weight: bold;
 }
 
 .quiz-opcao.errada {
-  background: #7a1d1d;
-  border-color: #ff8a8a;
+  background: var(--fundo-errado);
+  border-color: var(--borda-errado);
 }
 
 .quiz-feedback {
   margin-top: 16px;
   padding: 12px 14px;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.25);
-  border-left: 4px solid var(--dourado);
+  background: var(--fundo-feedback);
+  border-left: 4px solid var(--borda-destaque);
 }
 
 .quiz-feedback p {
@@ -553,20 +615,20 @@ body {
 
 .quiz-botao {
   margin-top: 12px;
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--fundo-botao-destaque);
+  color: var(--texto-botao-destaque);
   font-weight: bold;
   text-align: center;
 }
 
 .quiz-botao:hover,
 .quiz-botao:focus-visible {
-  background: var(--dourado-escuro);
-  color: var(--branco);
+  background: var(--fundo-botao-destaque-hover);
+  color: var(--texto-botao-destaque-hover);
 }
 
 .quiz-fim {
-  color: var(--dourado);
+  color: var(--texto-destaque);
   margin: 0 0 8px;
 }
 
@@ -583,20 +645,133 @@ body {
   font-size: 0.8rem;
   padding: 5px 10px;
   border-radius: 999px;
-  border: 1px solid var(--dourado);
+  border: 1px solid var(--borda-destaque);
   background: transparent;
-  color: var(--dourado);
+  color: var(--texto-destaque);
   cursor: pointer;
 }
 
 .botao-compartilhar:hover:not(:disabled),
 .botao-compartilhar:focus-visible {
-  background: var(--dourado);
-  color: var(--verde-escuro);
+  background: var(--fundo-botao-destaque);
+  color: var(--texto-botao-destaque);
   outline: none;
 }
 
 .botao-compartilhar:disabled {
   opacity: 0.6;
   cursor: wait;
+}
+
+/* =====================================================================
+   Tema claro: fundo branco com gramado claro. Texto escuro, dourado
+   escurecido para ter contraste sobre branco.
+   ===================================================================== */
+:root[data-tema="claro"] {
+  --texto: #14291b;
+  --texto-cabecalho: #ffffff;
+  --sombra: rgba(11, 61, 30, 0.18);
+  --fundo-corpo: repeating-linear-gradient(90deg, #d6ead9 0 60px, #e6f3e8 60px 120px);
+  --fundo-corpo-cor: #e6f3e8;
+  --fundo-campo: #ffffff;
+  --borda-campo: #17572c;
+  --fundo-cabecalho: linear-gradient(90deg, #17572c, #1f7a3c);
+  --titulo: #ffffff;
+  --texto-destaque: #6b4f00;
+  --borda-destaque: #b8860b;
+  --fundo-destaque-suave: rgba(23, 87, 44, 0.12);
+  --fundo-superficie: #f4faf5;
+  --fundo-superficie-hover: #dcefe0;
+  --fundo-menu: #f1f8f2;
+  --fundo-form: #f1f8f2;
+  --linha-central: rgba(23, 87, 44, 0.15);
+  --linha-tracejada: rgba(23, 87, 44, 0.3);
+  --fundo-entrada: #ffffff;
+  --texto-entrada: #14291b;
+  --borda-entrada: #17572c;
+  --texto-contador: #4f5f53;
+  --fundo-balao-usuario: #17572c;
+  --texto-balao-usuario: #ffffff;
+  --fundo-balao-bot: #e8f3ea;
+  --borda-balao-bot: #17572c;
+  --fundo-erro: #fbe1e1;
+  --borda-erro: #b00020;
+  --texto-erro: #5c0010;
+  --fundo-certo: #d5f2dc;
+  --borda-certo: #1f7a3c;
+  --fundo-errado: #fbe1e1;
+  --borda-errado: #b00020;
+  --fundo-feedback: rgba(23, 87, 44, 0.08);
+  --fundo-botao-destaque: #17572c;
+  --texto-botao-destaque: #ffffff;
+  --fundo-botao-destaque-hover: #0b3d1e;
+  --texto-botao-destaque-hover: #ffffff;
+  --fundo-hover-dourado: #17572c;
+  --texto-hover-dourado: #ffffff;
+  --bolinha-tempo-fundo: #ffffff;
+  --foco: #17572c;
+}
+
+/* =====================================================================
+   Alto contraste: preto e branco com destaque amarelo forte.
+   Sem transparências, bordas mais grossas e foco bem visível.
+   ===================================================================== */
+:root[data-tema="contraste"] {
+  --texto: #ffffff;
+  --texto-cabecalho: #ffffff;
+  --sombra: rgba(0, 0, 0, 0);
+  --fundo-corpo: #000000;
+  --fundo-corpo-cor: #000000;
+  --fundo-campo: #000000;
+  --borda-campo: #ffd700;
+  --fundo-cabecalho: #000000;
+  --titulo: #ffd700;
+  --texto-destaque: #ffd700;
+  --borda-destaque: #ffd700;
+  --fundo-destaque-suave: #333333;
+  --fundo-superficie: #000000;
+  --fundo-superficie-hover: #333333;
+  --fundo-menu: #000000;
+  --fundo-form: #000000;
+  --linha-central: transparent;
+  --linha-tracejada: #ffd700;
+  --fundo-entrada: #ffffff;
+  --texto-entrada: #000000;
+  --borda-entrada: #ffd700;
+  --texto-contador: #000000;
+  --fundo-balao-usuario: #ffd700;
+  --texto-balao-usuario: #000000;
+  --fundo-balao-bot: #000000;
+  --borda-balao-bot: #ffd700;
+  --fundo-erro: #000000;
+  --borda-erro: #ff6b6b;
+  --texto-erro: #ffffff;
+  --fundo-certo: #005a1e;
+  --borda-certo: #ffd700;
+  --fundo-errado: #7a0000;
+  --borda-errado: #ffd700;
+  --fundo-feedback: #1a1a1a;
+  --fundo-botao-destaque: #ffd700;
+  --texto-botao-destaque: #000000;
+  --fundo-botao-destaque-hover: #ffffff;
+  --texto-botao-destaque-hover: #000000;
+  --fundo-hover-dourado: #ffd700;
+  --texto-hover-dourado: #000000;
+  --bolinha-tempo-fundo: #000000;
+  --foco: #ffffff;
+}
+
+/* No modo de alto contraste, todo elemento focado mostra um contorno forte. */
+:root[data-tema="contraste"] :focus-visible {
+  outline: 4px solid #ffffff !important;
+  outline-offset: 2px;
+}
+
+/* Textos pequenos e opacos ficam mais legíveis no alto contraste. */
+:root[data-tema="contraste"] .fonte,
+:root[data-tema="contraste"] .nota,
+:root[data-tema="contraste"] .resumo,
+:root[data-tema="contraste"] .item-sub,
+:root[data-tema="contraste"] .cartao-sub {
+  opacity: 1;
 }
