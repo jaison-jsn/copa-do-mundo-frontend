@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linha do tempo · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1>Linha do tempo</h1>
+        <p>As Copas do Mundo, de 1930 a 2026</p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Chat</a>
+      <a href="linha-do-tempo.html" aria-current="page">Linha do tempo</a>
+      <a href="edicoes.html">Edições</a>
+      <a href="selecoes.html">Seleções</a>
+    </nav>
+
+    <main class="pagina">
+      <div class="filtro">
+        <label for="filtro-selecao">Mostrar edições de</label>
+        <select id="filtro-selecao">
+          <option value="">Todas as seleções</option>
+        </select>
+        <p id="resumo" class="resumo" aria-live="polite"></p>
+      </div>
+
+      <ol id="linha" class="linha-tempo" aria-live="polite"></ol>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/paginas.js"></script>
+  <script>
+    (async function () {
+      const linha = document.getElementById("linha");
+      const filtro = document.getElementById("filtro-selecao");
+      const resumo = document.getElementById("resumo");
+      let edicoes = [];
+
+      function envolvidos(e) {
+        // Todas as seleções que foram campeãs ou vices, sem repetir.
+        const nomes = new Set();
+        nomes.add(e.campeao);
+        nomes.add(e.vice);
+        return nomes;
+      }
+
+      function desenhar() {
+        const escolhida = filtro.value;
+        const visiveis = escolhida
+          ? edicoes.filter(function (e) { return envolvidos(e).has(escolhida); })
+          : edicoes;
+
+        const itens = visiveis.map(function (e) {
+          const item = criarElemento("li", "item-tempo");
+          const link = criarElemento("a", "item-link");
+          link.href = "edicao.html?ano=" + e.ano;
+
+          link.appendChild(criarElemento("span", "item-ano", String(e.ano)));
+          link.appendChild(criarElemento("span", "item-campeao", "Campeão: " + e.campeao));
+          link.appendChild(criarElemento("span", "item-sub", "Vice: " + e.vice));
+          link.appendChild(criarElemento("span", "item-sub", "Sede: " + e.sede));
+          item.appendChild(link);
+          return item;
+        });
+
+        linha.replaceChildren(...itens);
+        resumo.textContent = visiveis.length === edicoes.length
+          ? edicoes.length + " edições"
+          : visiveis.length + " de " + edicoes.length + " edições com " + escolhida;
+      }
+
+      try {
+        const dados = await buscarJSON("/api/edicoes");
+        edicoes = dados.edicoes;
+
+        const selecoes = new Set();
+        edicoes.forEach(function (e) { envolvidos(e).forEach(function (n) { selecoes.add(n); }); });
+        Array.from(selecoes).sort(function (a, b) { return a.localeCompare(b, "pt-BR"); }).forEach(function (nome) {
+          const opcao = criarElemento("option", null, nome);
+          opcao.value = nome;
+          filtro.appendChild(opcao);
+        });
+
+        filtro.addEventListener("change", desenhar);
+        desenhar();
+      } catch (erro) {
+        linha.replaceChildren(criarElemento("li", "balao erro", erro.message));
+      }
+    })();
+  </script>
+</body>
+</html>

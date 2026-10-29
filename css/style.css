@@ -372,3 +372,109 @@ body {
 .campo:has(.pagina)::before {
   display: none;
 }
+
+/* ===== Linha do tempo ===== */
+.filtro {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.filtro label {
+  color: var(--dourado);
+  font-weight: bold;
+}
+
+.filtro select {
+  font: inherit;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 2px solid var(--branco);
+  background: var(--branco);
+  color: var(--verde-escuro);
+  max-width: 100%;
+}
+
+.filtro select:focus {
+  outline: none;
+  border-color: var(--dourado);
+}
+
+.resumo {
+  width: 100%;
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+.linha-tempo {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 26px;
+  border-left: 3px solid var(--dourado);
+  display: grid;
+  gap: 14px;
+}
+
+.item-tempo {
+  position: relative;
+}
+
+.item-tempo::before {
+  content: "";
+  position: absolute;
+  left: -36px;
+  top: 16px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--verde-escuro);
+  border: 3px solid var(--dourado);
+  box-sizing: border-box;
+}
+
+.item-link {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--dourado);
+  background: var(--verde-escuro);
+  color: var(--texto);
+  text-decoration: none;
+  transition: background 0.15s, transform 0.15s;
+}
+
+.item-link:hover,
+.item-link:focus-visible {
+  background: var(--verde-gramado);
+  transform: translateX(3px);
+  outline: none;
+}
+
+.item-ano {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--dourado);
+}
+
+.item-campeao {
+  font-weight: bold;
+}
+
+.item-sub {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+/* Os itens do menu não quebram linha no celular. */
+.menu {
+  flex-wrap: wrap;
+}
+
+.menu a {
+  white-space: nowrap;
+}
