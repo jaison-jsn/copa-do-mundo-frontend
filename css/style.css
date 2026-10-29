@@ -574,3 +574,29 @@ body {
   font-size: 1.1rem;
   margin: 0 0 16px;
 }
+
+/* ===== Compartilhar resposta como imagem ===== */
+.botao-compartilhar {
+  display: block;
+  margin-top: 10px;
+  font: inherit;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--dourado);
+  background: transparent;
+  color: var(--dourado);
+  cursor: pointer;
+}
+
+.botao-compartilhar:hover:not(:disabled),
+.botao-compartilhar:focus-visible {
+  background: var(--dourado);
+  color: var(--verde-escuro);
+  outline: none;
+}
+
+.botao-compartilhar:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

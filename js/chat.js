@@ -10,10 +10,30 @@
 
   // Adiciona um balão na conversa. Usa textContent, nunca innerHTML,
   // para que o texto da resposta não execute HTML.
-  function adicionarBalao(texto, tipo) {
+  function adicionarBalao(texto, tipo, pergunta) {
     const balao = document.createElement("div");
     balao.className = "balao " + tipo;
     balao.textContent = texto;
+
+    // Só as respostas do bot que vieram de uma pergunta podem ser compartilhadas.
+    if (tipo === "bot" && pergunta) {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "botao-compartilhar";
+      botao.textContent = "Compartilhar imagem";
+      botao.addEventListener("click", async function () {
+        botao.disabled = true;
+        try {
+          await compartilharImagem(pergunta, texto);
+        } catch (erro) {
+          adicionarBalao("Não foi possível gerar a imagem: " + erro.message, "erro");
+        } finally {
+          botao.disabled = false;
+        }
+      });
+      balao.appendChild(botao);
+    }
+
     mensagens.appendChild(balao);
     balao.scrollIntoView({ behavior: "smooth", block: "end" });
   }
@@ -60,7 +80,7 @@
 
     try {
       const resposta = await enviarMensagem(texto);
-      adicionarBalao(resposta, "bot");
+      adicionarBalao(resposta, "bot", texto);
     } catch (erro) {
       adicionarBalao("Não foi possível obter a resposta: " + erro.message, "erro");
     } finally {
