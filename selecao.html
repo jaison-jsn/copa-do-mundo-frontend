@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seleção · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1 id="titulo">Seleção</h1>
+        <p id="subtitulo"></p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Chat</a>
+      <a href="edicoes.html">Edições</a>
+      <a href="selecoes.html" aria-current="page">Seleções</a>
+    </nav>
+
+    <main class="pagina">
+      <a class="voltar" href="selecoes.html">← Todas as seleções</a>
+      <div id="conteudo" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/paginas.js"></script>
+  <script>
+    (async function () {
+      const conteudo = document.getElementById("conteudo");
+      const nome = parametro("nome");
+      if (!nome) {
+        mostrarErro(conteudo, "Informe a seleção na barra de endereços, por exemplo selecao.html?nome=Brasil.");
+        return;
+      }
+      mostrarCarregando(conteudo);
+      try {
+        const s = await buscarJSON("/api/selecoes/" + encodeURIComponent(nome));
+        document.getElementById("titulo").textContent = s.selecao;
+        document.getElementById("subtitulo").textContent = "Títulos: " + s.titulos.length + " · Vices: " + s.vices.length;
+
+        const ficha = criarElemento("dl", "ficha");
+        ficha.appendChild(linhaFicha("Títulos", s.titulos.length ? s.titulos.join(", ") : "Nenhum"));
+        ficha.appendChild(linhaFicha("Vice-campeonatos", listaOuTraco(s.vices)));
+        ficha.appendChild(linhaFicha("Terceiros lugares", listaOuTraco(s.terceiros)));
+        ficha.appendChild(linhaFicha("Quartos lugares", listaOuTraco(s.quartos)));
+        ficha.appendChild(linhaFicha("Participações", s.participacoes));
+
+        const blocos = [ficha];
+        if (s.obs) blocos.push(criarElemento("p", "nota", s.obs));
+        blocos.push(criarElemento("p", "fonte", "Fonte: " + s.fonte));
+        conteudo.replaceChildren(...blocos);
+      } catch (erro) {
+        mostrarErro(conteudo, erro.message);
+      }
+    })();
+  </script>
+</body>
+</html>

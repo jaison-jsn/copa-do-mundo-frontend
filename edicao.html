@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edição · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1 id="titulo">Edição</h1>
+        <p id="subtitulo"></p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Chat</a>
+      <a href="edicoes.html" aria-current="page">Edições</a>
+      <a href="selecoes.html">Seleções</a>
+    </nav>
+
+    <main class="pagina">
+      <a class="voltar" href="edicoes.html">← Todas as edições</a>
+      <div id="conteudo" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/paginas.js"></script>
+  <script>
+    (async function () {
+      const conteudo = document.getElementById("conteudo");
+      const ano = parseInt(parametro("ano"), 10);
+      if (!ano) {
+        mostrarErro(conteudo, "Informe o ano da edição na barra de endereços, por exemplo edicao.html?ano=1994.");
+        return;
+      }
+      mostrarCarregando(conteudo);
+      try {
+        const e = await buscarJSON("/api/edicoes/" + ano);
+        document.getElementById("titulo").textContent = "Copa de " + e.ano;
+        document.getElementById("subtitulo").textContent = "Campeão: " + e.campeao;
+
+        const ficha = criarElemento("dl", "ficha");
+        ficha.appendChild(linhaFicha("Sede", e.sede));
+        ficha.appendChild(linhaFicha("Campeão", e.campeao));
+        ficha.appendChild(linhaFicha("Vice-campeão", e.vice));
+        ficha.appendChild(linhaFicha("Placar da final", e.placar_final));
+        if (e.data_final) ficha.appendChild(linhaFicha("Data da final", e.data_final));
+        ficha.appendChild(linhaFicha("Artilheiro", e.artilheiro ? e.artilheiro.join(", ") : null));
+        ficha.appendChild(linhaFicha("Gols do artilheiro", e.gols_artilheiro));
+        ficha.appendChild(linhaFicha("Bola de Ouro", e.bola_de_ouro || "Prêmio criado em 1982"));
+
+        const blocos = [ficha];
+        if (e.obs_artilheiro) blocos.push(criarElemento("p", "nota", e.obs_artilheiro));
+        blocos.push(criarElemento("p", "fonte", "Fonte: " + e.fonte));
+        conteudo.replaceChildren(...blocos);
+      } catch (erro) {
+        mostrarErro(conteudo, erro.message);
+      }
+    })();
+  </script>
+</body>
+</html>

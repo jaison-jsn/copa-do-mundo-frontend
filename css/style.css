@@ -224,3 +224,151 @@ body {
   .formulario { flex-direction: column; }
   #enviar { padding: 12px; }
 }
+
+/* ===== Menu e páginas de edições e seleções ===== */
+.menu {
+  display: flex;
+  gap: 8px;
+  padding: 10px 18px;
+  border-bottom: 1px solid var(--dourado);
+  background: var(--verde-escuro);
+}
+
+.menu a {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: var(--dourado);
+  text-decoration: none;
+  border: 1px solid transparent;
+}
+
+.menu a:hover,
+.menu a:focus-visible,
+.menu a[aria-current="page"] {
+  border-color: var(--dourado);
+  background: rgba(212, 175, 55, 0.15);
+  outline: none;
+}
+
+.pagina {
+  flex: 1;
+  padding: 18px;
+  overflow-y: auto;
+}
+
+.grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 12px;
+}
+
+.cartao {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--dourado);
+  background: var(--verde-escuro);
+  color: var(--texto);
+  text-decoration: none;
+  box-shadow: 0 2px 6px var(--sombra);
+  transition: transform 0.15s, background 0.15s;
+}
+
+.cartao:hover,
+.cartao:focus-visible {
+  transform: translateY(-2px);
+  background: var(--verde-gramado);
+  outline: none;
+}
+
+.cartao-ano {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: var(--dourado);
+}
+
+.cartao-titulo {
+  font-weight: bold;
+}
+
+.cartao-sub {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.voltar {
+  display: inline-block;
+  margin-bottom: 14px;
+  color: var(--dourado);
+  text-decoration: none;
+}
+
+.voltar:hover,
+.voltar:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
+.ficha {
+  margin: 0;
+  display: grid;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--dourado);
+  background: var(--verde-escuro);
+}
+
+.linha-ficha {
+  display: grid;
+  grid-template-columns: minmax(130px, 40%) 1fr;
+  gap: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px dashed rgba(212, 175, 55, 0.35);
+}
+
+.linha-ficha:last-child {
+  border-bottom: none;
+}
+
+.linha-ficha dt {
+  color: var(--dourado);
+  font-weight: bold;
+}
+
+.linha-ficha dd {
+  margin: 0;
+}
+
+.nota {
+  margin: 14px 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.fonte {
+  margin: 14px 0 0;
+  font-size: 0.8rem;
+  opacity: 0.75;
+}
+
+.carregando {
+  color: var(--dourado);
+  font-style: italic;
+}
+
+@media (max-width: 520px) {
+  .linha-ficha {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+/* Nas páginas de conteúdo, a linha central do campo não deve cortar o texto. */
+.campo:has(.pagina)::before {
+  display: none;
+}

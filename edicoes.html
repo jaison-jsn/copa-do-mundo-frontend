@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edições · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1>Edições da Copa</h1>
+        <p>De 1930 a 2026, com campeões, vices e artilheiros</p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Chat</a>
+      <a href="edicoes.html" aria-current="page">Edições</a>
+      <a href="selecoes.html">Seleções</a>
+    </nav>
+
+    <main class="pagina">
+      <div id="conteudo" class="grade" aria-live="polite"></div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/paginas.js"></script>
+  <script>
+    (async function () {
+      const conteudo = document.getElementById("conteudo");
+      mostrarCarregando(conteudo);
+      try {
+        const { edicoes } = await buscarJSON("/api/edicoes");
+        const cartoes = edicoes.map(function (e) {
+          const link = criarElemento("a", "cartao");
+          link.href = "edicao.html?ano=" + e.ano;
+          link.appendChild(criarElemento("span", "cartao-ano", String(e.ano)));
+          link.appendChild(criarElemento("span", "cartao-titulo", e.campeao));
+          link.appendChild(criarElemento("span", "cartao-sub", "Sede: " + e.sede));
+          link.appendChild(criarElemento("span", "cartao-sub", "Vice: " + e.vice));
+          return link;
+        });
+        conteudo.replaceChildren(...cartoes);
+      } catch (erro) {
+        mostrarErro(conteudo, erro.message);
+      }
+    })();
+  </script>
+</body>
+</html>
