@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mister Copa · Chatbot das Copas do Mundo</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1>Mister Copa</h1>
+        <p>Dados e fatos sobre todas as Copas do Mundo</p>
+      </div>
+    </header>
+
+    <main class="conversa">
+      <div id="mensagens" class="mensagens" aria-live="polite"></div>
+      <div id="digitando" class="digitando" hidden>Mister Copa está consultando os dados...</div>
+    </main>
+
+    <section class="sugestoes" aria-label="Sugestões de perguntas">
+      <button type="button" class="sugestao" data-pergunta="Quem foi campeão em 1994?">Campeão em 1994?</button>
+      <button type="button" class="sugestao" data-pergunta="Quais seleções têm 5 títulos?">Seleções com 5 títulos</button>
+      <button type="button" class="sugestao" data-pergunta="Quem foi o artilheiro da Copa de 2002?">Artilheiro de 2002</button>
+    </section>
+
+    <form id="formulario" class="formulario" autocomplete="off">
+      <div class="entrada">
+        <input id="pergunta" type="text" maxlength="500" placeholder="Pergunte sobre as Copas do Mundo..." required>
+        <span id="contador" class="contador">0/500</span>
+      </div>
+      <button type="submit" id="enviar">Enviar</button>
+    </form>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/chat.js"></script>
+</body>
+</html>
