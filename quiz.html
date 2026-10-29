@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <svg class="trofeu" viewBox="0 0 64 64" aria-hidden="true">
+        <path d="M18 8h28v12c0 9-6 16-14 16s-14-7-14-16V8z" fill="#d4af37"/>
+        <path d="M18 12H8v4c0 6 4 10 10 10M46 12h10v4c0 6-4 10-10 10" fill="none" stroke="#d4af37" stroke-width="3"/>
+        <rect x="28" y="36" width="8" height="10" fill="#d4af37"/>
+        <rect x="20" y="46" width="24" height="6" rx="2" fill="#b8860b"/>
+      </svg>
+      <div>
+        <h1>Quiz das Copas</h1>
+        <p>Dez perguntas sorteadas da base de fatos</p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Chat</a>
+      <a href="linha-do-tempo.html">Linha do tempo</a>
+      <a href="edicoes.html">Edições</a>
+      <a href="selecoes.html">Seleções</a>
+      <a href="quiz.html" aria-current="page">Quiz</a>
+    </nav>
+
+    <main class="pagina">
+      <div id="quiz" aria-live="polite">
+        <p class="carregando">Carregando perguntas...</p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/paginas.js"></script>
+  <script src="js/quiz.js"></script>
+  <script>
+    (async function () {
+      const area = document.getElementById("quiz");
+      try {
+        const { edicoes } = await buscarJSON("/api/edicoes");
+        iniciarQuiz(edicoes);
+      } catch (erro) {
+        mostrarErro(area, erro.message);
+      }
+    })();
+  </script>
+</body>
+</html>
