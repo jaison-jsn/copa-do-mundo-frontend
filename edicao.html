@@ -65,6 +65,13 @@
         const blocos = [ficha];
         if (e.obs_artilheiro) blocos.push(criarElemento("p", "nota", e.obs_artilheiro));
         blocos.push(criarElemento("p", "fonte", "Fonte: " + e.fonte));
+        if (e.link && e.link.startsWith("https://")) {
+          const link = criarElemento("a", "fonte-link", "Ver página de referência da Copa");
+          link.href = e.link;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          blocos.push(link);
+        }
         conteudo.replaceChildren(...blocos);
       } catch (erro) {
         mostrarErro(conteudo, erro.message);

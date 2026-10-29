@@ -432,6 +432,19 @@ body {
   font-style: italic;
 }
 
+.fonte-link {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: var(--texto-destaque);
+}
+
+.fonte-link:hover,
+.fonte-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
+}
+
 @media (max-width: 520px) {
   .linha-ficha {
     grid-template-columns: 1fr;
