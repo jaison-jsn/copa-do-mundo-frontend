@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Painel de uso · Mister Copa</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/tema.js"></script>
+  <style>
+    .painel-resumo { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .painel-numero { font-size: 1.8rem; font-weight: bold; color: var(--texto-destaque); }
+    .painel-tabela { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin-top: 8px; }
+    .painel-tabela th, .painel-tabela td { text-align: left; padding: 6px 8px; border-bottom: 1px dashed var(--linha-tracejada); }
+    .painel-tabela th { color: var(--texto-destaque); }
+    .painel-form { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+    .painel-form input { font: inherit; padding: 8px 10px; border-radius: 8px; border: 2px solid var(--borda-entrada); background: var(--fundo-entrada); color: var(--texto-entrada); flex: 1; min-width: 180px; }
+    .painel-form button { font: inherit; font-weight: bold; padding: 8px 16px; border-radius: 8px; border: none; background: var(--fundo-botao-destaque); color: var(--texto-botao-destaque); cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="campo">
+    <header class="cabecalho">
+      <div>
+        <h1>Painel de uso</h1>
+        <p>Perguntas por dia, temas e taxa de recusa</p>
+      </div>
+    </header>
+
+    <nav class="menu" aria-label="Navegação">
+      <a href="index.html">Voltar ao chat</a>
+    </nav>
+
+    <main class="pagina">
+      <form id="form-token" class="painel-form">
+        <input id="token" type="password" placeholder="Token do painel" aria-label="Token do painel" autocomplete="off">
+        <button type="submit">Ver painel</button>
+      </form>
+      <p id="status" class="carregando" aria-live="polite"></p>
+      <div id="conteudo"></div>
+    </main>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      const CHAVE = "mister-copa-token-painel";
+      const formulario = document.getElementById("form-token");
+      const campo = document.getElementById("token");
+      const status = document.getElementById("status");
+      const conteudo = document.getElementById("conteudo");
+
+      function celula(tag, texto) {
+        const el = document.createElement(tag);
+        el.textContent = texto;
+        return el;
+      }
+
+      function desenhar(dados) {
+        const percentual = Math.round((dados.taxa_recusa || 0) * 100) + "%";
+        const resumo = document.createElement("div");
+        resumo.className = "painel-resumo";
+        [
+          ["Perguntas no período", dados.total_perguntas],
+          ["Taxa de recusa", percentual],
+          ["Dias com uso", dados.dias.length],
+        ].forEach(function (par) {
+          const bloco = document.createElement("div");
+          bloco.className = "ficha";
+          bloco.appendChild(celula("span", par[0]));
+          bloco.appendChild(celula("div", String(par[1])));
+          bloco.lastChild.className = "painel-numero";
+          resumo.appendChild(bloco);
+        });
+
+        const tituloDias = celula("h2", "Perguntas por dia (UTC)");
+        tituloDias.style.color = "var(--texto-destaque)";
+        const tabelaDias = document.createElement("table");
+        tabelaDias.className = "painel-tabela";
+        const cabecalhoDias = document.createElement("tr");
+        ["Dia", "Total", "Respondidas", "Recusadas", "Erros"].forEach(function (t) { cabecalhoDias.appendChild(celula("th", t)); });
+        tabelaDias.appendChild(cabecalhoDias);
+        dados.dias.forEach(function (d) {
+          const linha = document.createElement("tr");
+          [d.data, d.perguntas, d.respondidas, d.recusadas, d.erros].forEach(function (v) { linha.appendChild(celula("td", String(v))); });
+          tabelaDias.appendChild(linha);
+        });
+
+        const tituloTemas = celula("h2", "Temas mais procurados");
+        tituloTemas.style.color = "var(--texto-destaque)";
+        const tabelaTemas = document.createElement("table");
+        tabelaTemas.className = "painel-tabela";
+        dados.temas.forEach(function (t) {
+          const linha = document.createElement("tr");
+          linha.appendChild(celula("td", t.tema));
+          linha.appendChild(celula("td", String(t.perguntas)));
+          tabelaTemas.appendChild(linha);
+        });
+
+        const nota = celula("p", dados.observacao);
+        nota.className = "nota";
+        conteudo.replaceChildren(resumo, tituloDias, tabelaDias, tituloTemas, tabelaTemas, nota);
+      }
+
+      async function carregar(token) {
+        status.textContent = "Carregando...";
+        conteudo.replaceChildren();
+        try {
+          const resp = await fetch(API_URL + "/api/uso", { headers: { "X-Painel-Token": token } });
+          let dados = {};
+          try { dados = await resp.json(); } catch (_) { /* sem JSON */ }
+          if (!resp.ok) throw new Error(dados.erro || "Erro ao carregar o painel (" + resp.status + ").");
+          status.textContent = "";
+          desenhar(dados);
+        } catch (erro) {
+          status.textContent = erro.message;
+          if (erro.message.indexOf("Token") !== -1) {
+            try { sessionStorage.removeItem(CHAVE); } catch (_) { /* ignora */ }
+          }
+        }
+      }
+
+      formulario.addEventListener("submit", function (evento) {
+        evento.preventDefault();
+        const token = campo.value.trim();
+        if (!token) return;
+        try { sessionStorage.setItem(CHAVE, token); } catch (_) { /* ignora */ }
+        carregar(token);
+      });
+
+      let salvo = null;
+      try { salvo = sessionStorage.getItem(CHAVE); } catch (_) { salvo = null; }
+      if (salvo) carregar(salvo);
+    })();
+  </script>
+</body>
+</html>
